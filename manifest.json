@@ -2,7 +2,7 @@
   "dxt_version": "0.1",
   "name": "lapras-mcp-server",
   "display_name": "LAPRAS MCP Server",
-  "version": "0.5.2",
+  "version": "0.7.0",
   "description": "LAPRAS（https://lapras.com）公式 MCP Server。",
   "long_description": "LAPRAS（https://lapras.com）公式 MCP Server。LAPRAS上の求人検索やキャリア閲覧・編集をLLMサービスから直接利用できます。転職活動やキャリア管理を効率化できます。",
   "icon": "assets/icon.png",
@@ -78,6 +78,14 @@
     {
       "name": "update_tech_skill",
       "description": "Register or update tech skills in LAPRAS"
+    },
+    {
+      "name": "get_portfolio",
+      "description": "Get portfolio (profile, scores, skill tags, languages, selections) registered in LAPRAS"
+    },
+    {
+      "name": "get_outputs",
+      "description": "Get outputs (GitHub repositories, tech articles, events, slides, teratail replies) registered in LAPRAS with pagination"
     }
   ],
   "keywords": ["mcp", "lapras", "job_description", "career", "jobs"],
