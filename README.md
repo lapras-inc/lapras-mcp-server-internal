@@ -11,7 +11,7 @@ https://lapras.com 公式のMCP Server
 ##  Setup
 
 MCP Serverの設定（[Cursor](https://docs.cursor.com/context/model-context-protocol#configuring-mcp-servers)、[Claude Desktop](https://modelcontextprotocol.io/quickstart/user)）を参考に、mcp.jsonまたはclaude_desktop_config.jsonに以下を追記してください。  
-LAPRAS_API_KEYは職歴関連のツールを使う場合のみ必要です。https://lapras.com/config/api-key から取得できます。
+LAPRAS_API_KEYは職歴・テックスキル・ポートフォリオ関連のツールを使う場合のみ必要です。https://lapras.com/config/api-key から取得できます。
 
 ### Desktop Extension (DXT)
 
@@ -211,6 +211,6 @@ https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 - 使用例: `get_outputs` ツールを呼び出し、自分のアウトプット一覧を取得
 
 > [!NOTE]
-> 職歴関連・ポートフォリオ関連のツールを使用するには、LAPRAS_API_KEYの設定が必要です。
+> 職歴・テックスキル・ポートフォリオ関連のツールを使用するには、LAPRAS_API_KEYの設定が必要です。
 > APIキーは https://lapras.com/config/api-key から取得できます。
 
