@@ -7,6 +7,8 @@ import { DeleteExperienceTool } from "./tools/deleteExperience.js";
 import { GetExpriencesTool } from "./tools/getExperiences.js";
 import { GetJobDetailTool } from "./tools/getJobDetail.js";
 import { GetJobSummaryTool } from "./tools/getJobSummary.js";
+import { GetOutputsTool } from "./tools/getOutputs.js";
+import { GetPortfolioTool } from "./tools/getPortfolio.js";
 import { GetTechSkillTool } from "./tools/getTechSkill.js";
 import { GetWantToDoTool } from "./tools/getWantToDo.js";
 import { SearchJobsTool } from "./tools/searchJobs.js";
@@ -29,6 +31,8 @@ export const ALL_TOOLS: IMCPTool[] = [
   new UpdateWantToDoTool(), // 今後のキャリアでやりたいこと更新ツール
   new GetTechSkillTool(), // テックスキル取得ツール
   new UpdateTechSkillTool(), // テックスキル更新ツール
+  new GetPortfolioTool(), // ポートフォリオ取得ツール
+  new GetOutputsTool(), // アウトプット一覧取得ツール
 ];
 
 const server = new McpServer(
