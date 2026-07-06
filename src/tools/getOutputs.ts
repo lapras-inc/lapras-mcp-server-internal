@@ -18,6 +18,10 @@ const parameters = {
 /**
  * MCP SDKが`z.object(parameters)`のparse結果をexecuteに渡すため、
  * 未指定のoptionalパラメータはキー自体が存在しないオブジェクトになる。その形をそのまま型にする。
+ *
+ * `types.ts`の`InferZodParams`は`.optional()`スキーマでもキーを必須として推論するため、
+ * `execute({})`のような呼び出しがキャスト無しでは書けない（既存テストの`as any`はこれが理由）。
+ * ここではzodのオブジェクト推論から導出することで、テストがSDKの渡す実際の形をそのまま使えるようにしている。
  */
 type GetOutputsArgs = z.infer<z.ZodObject<typeof parameters>>;
 
