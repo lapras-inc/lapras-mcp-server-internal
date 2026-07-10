@@ -76,6 +76,39 @@ describe("GetPortfolioTool", () => {
     expect(callUrl).toBe("https://lapras.com/api/mcp/portfolio");
   });
 
+  it("market_value_score.category_skill_evidencesはレスポンスから除外される", async () => {
+    const mockData = {
+      profile: { bio: "サンプル" },
+      market_value_score: {
+        total: 3.5,
+        percentile: 85.0,
+        tagline: "サンプルタグライン",
+        category_skill_evidences: [
+          {
+            category_id: "technology",
+            evidences: [
+              { skill_text: "Python", evidences: ["Python"], source_type: "tech_skill" },
+              { skill_text: "Python", evidences: [], source_type: "experience" },
+            ],
+          },
+        ],
+      },
+      skill_tags: [{ id: 1, name: "Python", level: 10 }],
+    };
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(mockData),
+    });
+
+    const result = await tool.execute();
+
+    const parsed = JSON.parse(result.content[0].text as string);
+    expect(parsed.market_value_score.category_skill_evidences).toBeUndefined();
+    expect(parsed.market_value_score.tagline).toBe("サンプルタグライン");
+    expect(parsed.skill_tags).toEqual(mockData.skill_tags);
+  });
+
   it("LAPRAS_API_KEYが設定されていない場合はエラーを返す", async () => {
     process.env.LAPRAS_API_KEY = undefined;
 
