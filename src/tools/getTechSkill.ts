@@ -1,9 +1,10 @@
 import type { TextContent } from "@modelcontextprotocol/sdk/types.js";
 import fetch from "node-fetch";
+import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
-import type { IMCPTool } from "../types.js";
+import type { IMCPTool, InferZodParams } from "../types.js";
 
 const EXPERIENCE_YEARS_LABEL_MAP: Record<number, string> = {
   0: "1年未満",
@@ -18,10 +19,38 @@ const formatSkillYears = (yearsId: number): string => {
   return EXPERIENCE_YEARS_LABEL_MAP[yearsId] ?? "不明";
 };
 
+const TechSkillItemOutputSchema = z.object({
+  tech_skill_id: z
+    .number()
+    .describe(
+      "LAPRAS内部のスキルマスタのID。update_tech_skillはこのIDではなくtech_skill_name（スキル名）で指定する",
+    ),
+  tech_skill_name: z
+    .string()
+    .nullable()
+    .describe("人間可読なスキル名（例: Python, TypeScript）。マスタに存在しないIDの場合はnull"),
+  years_id: z
+    .number()
+    .describe(
+      "経験年数バケットの下限年数を表す内部値（0,1,2,3,5,10）。update_tech_skillはこの値ではなく実年数（years）で指定する",
+    ),
+  years_label: z.string().describe("years_idを日本語ラベル化したもの（例: 3年以上5年未満）"),
+});
+
+const GetTechSkillOutputSchema = {
+  error: z.boolean().describe("常にfalseを返す。エラー時はMCPプロトコルのisErrorで判別する"),
+  updated_at: z.string().describe("ユーザーが最後にテックスキルを更新した日時（ISO8601）"),
+  tech_skill_list: z
+    .array(TechSkillItemOutputSchema)
+    .describe("ユーザーが登録している技術スキル一覧"),
+} as const;
+
 /**
  * テックスキル取得ツール
  */
-export class GetTechSkillTool implements IMCPTool {
+export class GetTechSkillTool
+  implements IMCPTool<Record<string, never>, typeof GetTechSkillOutputSchema>
+{
   /**
    * Tool name
    */
@@ -39,10 +68,16 @@ export class GetTechSkillTool implements IMCPTool {
   readonly parameters = {} as const;
 
   /**
+   * 返り値の構造をフィールド単位で意味づけするスキーマ
+   */
+  readonly outputSchema = GetTechSkillOutputSchema;
+
+  /**
    * Execute function
    */
   async execute(): Promise<{
     content: TextContent[];
+    structuredContent?: InferZodParams<typeof GetTechSkillOutputSchema>;
     isError?: boolean;
   }> {
     const apiKeyResult = validateApiKey();
@@ -96,21 +131,20 @@ export class GetTechSkillTool implements IMCPTool {
         };
       });
 
+      const structuredContent = {
+        error: data.error,
+        updated_at: data.updated_at,
+        tech_skill_list: formatted,
+      };
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(
-              {
-                error: data.error,
-                updated_at: data.updated_at,
-                tech_skill_list: formatted,
-              },
-              null,
-              2,
-            ),
+            text: JSON.stringify(structuredContent, null, 2),
           },
         ],
+        structuredContent,
       };
     } catch (error) {
       console.error(error);
