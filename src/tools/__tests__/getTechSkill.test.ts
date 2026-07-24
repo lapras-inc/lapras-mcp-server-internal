@@ -102,6 +102,54 @@ describe("GetTechSkillTool", () => {
         },
       }),
     );
+
+    expect(result.structuredContent).toEqual({
+      error: false,
+      updated_at: "2025-09-26T10:00:00Z",
+      tech_skill_list: [
+        {
+          tech_skill_id: 1,
+          tech_skill_name: "Python",
+          years_id: 3,
+          years_label: "3年以上5年未満",
+        },
+        {
+          tech_skill_id: 2,
+          tech_skill_name: "Go",
+          years_id: 5,
+          years_label: "5年以上10年未満",
+        },
+      ],
+    });
+  });
+
+  it("マスタに存在しないtech_skill_idの場合はtech_skill_nameがnullになる", async () => {
+    mockFetch
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            tech_skill_list: [{ id: 1, name: "Python" }],
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            error: false,
+            tech_skill_list: [{ tech_skill_id: 999, years: 3 }],
+            updated_at: "2025-09-26T10:00:00Z",
+          }),
+      });
+
+    const result = await tool.execute();
+
+    expect(result.structuredContent?.tech_skill_list[0]).toEqual({
+      tech_skill_id: 999,
+      tech_skill_name: null,
+      years_id: 3,
+      years_label: "3年以上5年未満",
+    });
   });
 
   it("LAPRAS_API_KEYが設定されていない場合はエラーを返す", async () => {
