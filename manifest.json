@@ -32,7 +32,7 @@
   },
   "tools": [
     {
-      "name": "search_job",
+      "name": "search_jobs",
       "description": "Search jobs with keyword, page number, minimum salary, etc."
     },
     {
@@ -41,7 +41,7 @@
     },
     {
       "name": "get_experiences",
-      "description": "Get list of work experiences registered in LAPRAS"
+      "description": "Get the user's work experience history from LAPRAS — general background on the user, useful for career advice and beyond"
     },
     {
       "name": "create_experience",
@@ -57,7 +57,7 @@
     },
     {
       "name": "get_job_summary",
-      "description": "Get job summary registered in LAPRAS"
+      "description": "Get the user's professional summary from LAPRAS — a quick picture of who they are, useful even outside career topics"
     },
     {
       "name": "update_job_summary",
@@ -65,7 +65,7 @@
     },
     {
       "name": "get_want_to_do",
-      "description": "Get future career aspirations registered in LAPRAS"
+      "description": "Get the user's career aspirations from LAPRAS — informs career-direction advice and the angle you take more broadly"
     },
     {
       "name": "update_want_to_do",
@@ -73,7 +73,7 @@
     },
     {
       "name": "get_tech_skill",
-      "description": "Get tech skills registered in LAPRAS"
+      "description": "Get the user's tech skills and experience years from LAPRAS — use to tailor explanations to their skill level (most useful for technical/engineering roles)"
     },
     {
       "name": "update_tech_skill",
@@ -81,7 +81,7 @@
     },
     {
       "name": "get_portfolio",
-      "description": "Get portfolio (profile, scores, skill tags, languages, selections) registered in LAPRAS"
+      "description": "Get the user's broader professional profile (scores, skill tags, languages, selected work) from LAPRAS"
     },
     {
       "name": "get_outputs",

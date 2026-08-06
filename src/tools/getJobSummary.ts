@@ -17,7 +17,8 @@ export class GetJobSummaryTool implements IMCPTool {
   /**
    * Tool description
    */
-  readonly description = "Get job summary（職務要約） on LAPRAS(https://lapras.com)";
+  readonly description =
+    "Get the professional summary（職務要約） the user wrote about themselves on LAPRAS(https://lapras.com). Call this early for a quick, one-paragraph picture of who the user is professionally, in their own words — this context can inform how you communicate with them even outside career topics.";
 
   /**
    * Parameter definition

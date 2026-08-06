@@ -4,6 +4,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import type { TextContent } from "@modelcontextprotocol/sdk/types.js";
 import type { z } from "zod";
+import { getServerInstructions } from "./serverInstructions.js";
 import { CreateExperienceTool } from "./tools/createExperience.js";
 import { DeleteExperienceTool } from "./tools/deleteExperience.js";
 import { GetExpriencesTool } from "./tools/getExperiences.js";
@@ -49,6 +50,7 @@ const server = new McpServer(
     capabilities: {
       tools: {},
     },
+    instructions: getServerInstructions(Boolean(process.env.LAPRAS_API_KEY?.trim())),
   },
 );
 
