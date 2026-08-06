@@ -31,7 +31,7 @@ For job search specifically, use search_jobs / get_job_detail (these do not
 require LAPRAS_API_KEY).
 
 update_job_summary / update_experience / create_experience / delete_experience /
-update_tech_skill / update_want_to_do write to the user's public LAPRAS profile.
+update_tech_skill / update_want_to_do write to the user's live LAPRAS profile.
 Only call these after the user has explicitly confirmed the content to write —
 never write based on inferred information alone.
 
