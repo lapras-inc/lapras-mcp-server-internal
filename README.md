@@ -154,9 +154,9 @@ LAPRASから私のポートフォリオとアウトプット一覧を取得し�
 https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 
 ## Tools
-###  `search_job` 求人検索
+###  `search_jobs` 求人検索
 - キーワード、ページ番号、最低年収などのパラメータを使用して求人を検索
-- 使用例: `search_job` ツールを呼び出し、特定の条件に合致する求人リストを取得
+- 使用例: `search_jobs` ツールを呼び出し、特定の条件に合致する求人リストを取得
 
 ### `get_job_detail` 求人詳細取得
 - 求人IDを指定して特定の求人の詳細情報を取得

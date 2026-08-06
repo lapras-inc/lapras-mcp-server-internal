@@ -43,10 +43,10 @@ feature.`;
 const WITHOUT_API_KEY_INSTRUCTIONS = `This server lets the user search LAPRAS(https://lapras.com) job postings via
 search_jobs / get_job_detail — these work without any configuration. Profile
 tools (get_experiences, get_tech_skill, get_want_to_do, get_job_summary,
-get_portfolio, and their update/create/delete counterparts) require a
-LAPRAS_API_KEY that is not currently configured — do not call them. If the
-user wants profile-aware features (personalized advice based on their LAPRAS
-profile, résumé/CV editing, etc.), tell them to get a key from
+get_portfolio, get_outputs, and their update/create/delete counterparts)
+require a LAPRAS_API_KEY that is not currently configured — do not call them.
+If the user wants profile-aware features (personalized advice based on their
+LAPRAS profile, résumé/CV editing, etc.), tell them to get a key from
 https://lapras.com/config/api-key and add it to their MCP configuration.`;
 
 /**
