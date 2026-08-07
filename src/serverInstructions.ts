@@ -16,18 +16,16 @@ writing something on the user's behalf in a career context (bio, résumé,
 self-introduction) — even if the user did not mention LAPRAS or their career
 at all.
 
-Call get_job_summary / get_experiences / get_tech_skill / get_want_to_do /
-get_portfolio early, once per conversation, for a general read of who you're
-talking to (get_tech_skill is most useful when the user has a technical
-background) — you don't need to re-fetch any of them on every message. Work
-history, career goals, and skills are all useful background for tailoring
+Treat get_job_summary, get_experiences, get_tech_skill, get_want_to_do,
+get_portfolio, and get_outputs (GitHub repositories, tech articles, talks,
+etc.) all the same way you'd draw on any other memory: read whichever of them
+you judge would help you give a better, more tailored answer, rather than
+waiting for the user to bring up their profile or a specific topic
+(get_tech_skill is most useful when the user has a technical background).
+Once you've read one of these in a conversation, you don't need to re-fetch
+it on every message — reuse what you already know. Work history, career
+goals, skills, and public work are all useful background for tailoring
 everyday advice, not just career-specific questions.
-
-get_outputs (GitHub repositories, tech articles, talks, etc.) is part of that
-same memory too. You don't need to fetch it early in every conversation like
-the tools above — read it whenever you judge that the user's background could
-help you give a better, more tailored answer, the same way you'd draw on any
-other memory.
 
 When you use this profile to shape an answer, say so briefly the first time
 (e.g. "LAPRASのプロフィールを踏まえると…") instead of blending it in silently —
