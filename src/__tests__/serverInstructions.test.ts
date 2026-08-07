@@ -9,9 +9,14 @@ const TOOLS_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "tools");
 /**
  * LAPRAS_API_KEYを要求する（validateApiKeyを呼ぶ）読み取り系（get_*）ツールの
  * nameを、src/tools/*.ts から実際に走査して求める。手書きの一覧だと
- * ツール追加時に更新を忘れて漏れる（get_outputsで実際に発生した）ため、
- * ソースを都度読んで導出する。書き込み系（update系・create系・delete系）は
- * 案内文中で個別名ではなく"counterparts"と総称しているため対象外とする。
+ * ツール追加時に更新を忘れて漏れるため、ソースを都度読んで導出する。
+ * 書き込み系（update系・create系・delete系）は案内文中で個別名ではなく
+ * "counterparts"と総称しているため対象外とする。
+ *
+ * validateApiKeyを呼んでいるのにnameを抽出できないファイルは、想定している
+ * `readonly name = "..."` という書き方から外れている（＝この関数がそのツールを
+ * 静かに見落とし始めている）ことを意味するため、フォールバックで無視せず
+ * エラーとして即座に気づけるようにする。
  */
 function getApiKeyRequiredReadToolNames(): string[] {
   return readdirSync(TOOLS_DIR)
@@ -20,7 +25,12 @@ function getApiKeyRequiredReadToolNames(): string[] {
       const source = readFileSync(join(TOOLS_DIR, file), "utf-8");
       if (!source.includes("validateApiKey")) return [];
       const nameMatch = source.match(/readonly name = "([^"]+)"/);
-      return nameMatch ? [nameMatch[1]] : [];
+      if (!nameMatch) {
+        throw new Error(
+          `${file} calls validateApiKey but its tool name could not be extracted — update the regex in getApiKeyRequiredReadToolNames`,
+        );
+      }
+      return [nameMatch[1]];
     });
 }
 

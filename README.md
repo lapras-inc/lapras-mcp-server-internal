@@ -165,6 +165,7 @@ https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 ### `get_experiences` 職歴一覧取得
 - LAPRASに登録されている職歴情報の一覧を取得
 - 使用例: `get_experiences` ツールを呼び出し、登録済みの職歴一覧を取得
+- キャリア相談や日常の会話でも、AIが指示なしにこのツールを呼び出し、職歴を踏まえて回答することがあります
 
 ### `create_experience` 職歴新規追加
 - LAPRASに新しい職歴情報を追加
@@ -181,6 +182,7 @@ https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 ### `get_job_summary` 職務要約取得
 - LAPRASに登録されている職務要約を取得
 - 使用例: `get_job_summary` ツールを呼び出し、登録済みの職務要約を取得
+- キャリア相談や日常の会話でも、AIが指示なしにこのツールを呼び出し、職務要約を踏まえて回答することがあります
 
 ### `update_job_summary` 職務要約更新
 - LAPRASに職務要約を登録または更新
@@ -189,6 +191,7 @@ https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 ### `get_want_to_do` キャリア志向取得
 - LAPRASに登録されている今後のキャリアでやりたいことを取得
 - 使用例: `get_want_to_do` ツールを呼び出し、やりたいことを取得
+- キャリアの方向性についての会話で、AIが指示なしにこのツールを呼び出し、やりたいことを踏まえて回答することがあります
 
 ### `update_want_to_do` キャリア志向更新
 - LAPRASに今後のキャリアでやりたいことを登録または更新
@@ -198,6 +201,7 @@ https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 - LAPRASに登録されている経験技術・スキル・資格
 一覧（スキルID・スキル名・経験年数）を取得
 - 使用例: `get_tech_skill` ツールを呼び出し、現在のテックスキルの状況を確認
+- 技術的な相談や日常の会話でも、AIが指示なしにこのツールを呼び出し、スキルレベルを踏まえて回答することがあります
 
 ### `update_tech_skill` テックスキル更新
 - 経験技術・スキル・資格と経験年数（実数値）を指定して、LAPRASのテックスキルを更新
@@ -206,6 +210,7 @@ https://github.com/user-attachments/assets/9c61470f-f97d-4e6f-97ca-53718c796376
 ### `get_portfolio` ポートフォリオ取得
 - LAPRASに登録されているプロフィール・スコア・スキルタグ・使用言語・Selectionsを取得
 - 使用例: `get_portfolio` ツールを呼び出し、自分のポートフォリオ情報を取得
+- 自己紹介や日常の会話でも、AIが指示なしにこのツールを呼び出し、プロフィールを踏まえて回答することがあります
 
 ### `get_outputs` アウトプット一覧取得
 - LAPRASに登録されているアウトプット（GitHubリポジトリ・技術記事・イベント・SpeakerDeckスライド・teratail回答）を種別絞り込み・ページネーション付きで取得
