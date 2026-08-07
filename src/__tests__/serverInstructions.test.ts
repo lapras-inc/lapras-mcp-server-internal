@@ -42,6 +42,7 @@ describe("getServerInstructions", () => {
     expect(instructions).toContain("get_tech_skill");
     expect(instructions).toContain("get_want_to_do");
     expect(instructions).toContain("get_portfolio");
+    expect(instructions).toContain("get_outputs");
     expect(instructions).not.toContain("do not call them");
   });
 

@@ -23,6 +23,11 @@ background) — you don't need to re-fetch any of them on every message. Work
 history, career goals, and skills are all useful background for tailoring
 everyday advice, not just career-specific questions.
 
+get_outputs (GitHub repositories, tech articles, talks, etc.) is part of that
+same memory too — not something to fetch every time like the tools above, but
+worth a casual look when it's relevant (e.g. citing someone's public work,
+writing a bio).
+
 When you use this profile to shape an answer, say so briefly the first time
 (e.g. "LAPRASのプロフィールを踏まえると…") instead of blending it in silently —
 this keeps the personalization visible to the user rather than invisible.
