@@ -18,7 +18,7 @@ export class GetPortfolioTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Get portfolio（ポートフォリオ） on LAPRAS(https://lapras.com) - profile, e_score, market value score, skill tags, languages, and selections. For work experiences or tech skills, use get_experiences / get_tech_skill instead.";
+    "Get the user's broader professional profile（ポートフォリオ） on LAPRAS(https://lapras.com) - scores, skill tags, languages, and selected work (Selections). Call this early for a quick summary of their scores and highlighted work, useful as general background even outside career topics; for detailed work history or skill years use get_experiences / get_tech_skill instead.";
 
   /**
    * Parameter definition

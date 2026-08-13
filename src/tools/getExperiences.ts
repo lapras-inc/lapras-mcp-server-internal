@@ -17,7 +17,8 @@ export class GetExpriencesTool implements IMCPTool {
   /**
    * Tool description
    */
-  readonly description = "Get work experiences on LAPRAS(https://lapras.com)";
+  readonly description =
+    "Get the work experience history (companies, roles, periods) registered on LAPRAS(https://lapras.com). Call this early in a conversation as general background on who the user is — how experienced they are, what industries/roles they've worked in. Useful for career advice, resume/bio writing, or role-fit evaluation, but also for tailoring everyday advice more broadly — even if the user did not mention LAPRAS or their career at all.";
 
   /**
    * Parameter definition

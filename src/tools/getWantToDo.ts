@@ -18,7 +18,7 @@ export class GetWantToDoTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Get career aspirations（今後のキャリアでやりたいこと） on LAPRAS(https://lapras.com)";
+    "Get the career aspirations（今後のキャリアでやりたいこと） the user registered on LAPRAS(https://lapras.com). Call this early to know what the user actually wants to do next — grounds career-direction and job-search advice, and can also inform the angle you take on unrelated advice (e.g. someone aiming for management vs. staying hands-on technical).";
 
   /**
    * Parameter definition

@@ -60,7 +60,7 @@ export class GetTechSkillTool
    * Tool description
    */
   readonly description =
-    "Get current tech skills（経験技術・スキル・資格） on LAPRAS(https://lapras.com)";
+    "Get the tech skills, experience years, and qualifications（経験技術・スキル・資格） registered on LAPRAS(https://lapras.com). Call this early in a conversation to learn the user's technical background, so you can tailor the depth and content of any explanation or suggestion to their actual skill level (most useful when the user has a technical/engineering background — may be sparse for other roles).";
 
   /**
    * Parameter definition
