@@ -19,7 +19,7 @@ export class DeleteExperienceTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Delete a work experience from LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Delete a work experience from LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This permanently removes an entry from the user's live work history — only delete an entry the user has explicitly confirmed, never one you inferred should go.";
 
   /**
    * Parameter definition

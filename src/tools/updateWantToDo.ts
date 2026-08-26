@@ -20,7 +20,7 @@ export class UpdateWantToDoTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update career aspirations（今後のキャリアでやりたいこと） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Update career aspirations（今後のキャリアでやりたいこと） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This overwrites the user's live career aspirations — only submit content the user has explicitly confirmed, never content you inferred.";
 
   /**
    * Parameter definition

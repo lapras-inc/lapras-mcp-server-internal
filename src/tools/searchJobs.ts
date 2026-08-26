@@ -52,6 +52,8 @@ export class SearchJobsTool implements IMCPTool {
    */
   readonly description = "Search job by keyword, position, and minimum annual salary";
 
+  readonly annotations = { readOnlyHint: true };
+
   /**
    * Parameter definition
    */

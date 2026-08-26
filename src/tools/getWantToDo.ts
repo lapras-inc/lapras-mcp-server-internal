@@ -25,6 +25,10 @@ export class GetWantToDoTool implements IMCPTool {
    */
   readonly parameters = {} as const;
 
+  readonly _meta = { "anthropic/alwaysLoad": true };
+
+  readonly annotations = { readOnlyHint: true };
+
   /**
    * Execute function
    */

@@ -20,7 +20,7 @@ export class UpdateJobSummaryTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update job summary（職務要約） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Update job summary（職務要約） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This overwrites the user's live professional summary — only submit wording the user has explicitly confirmed, never content you inferred.";
 
   /**
    * Parameter definition

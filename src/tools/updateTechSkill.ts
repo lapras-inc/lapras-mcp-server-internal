@@ -35,7 +35,7 @@ export class UpdateTechSkillTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update tech skills（経験技術・スキル・資格） on LAPRAS(https://lapras.com)";
+    "Update tech skills（経験技術・スキル・資格） on LAPRAS(https://lapras.com). This overwrites the user's live tech skill list — only submit skills and years the user has explicitly confirmed, never ones you inferred.";
 
   /**
    * Parameter definition

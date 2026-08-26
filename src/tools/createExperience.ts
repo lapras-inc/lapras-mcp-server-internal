@@ -20,7 +20,7 @@ export class CreateExperienceTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Create a new work experience on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Create a new work experience on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This adds a new entry to the user's live work history — only submit details the user has explicitly confirmed, never ones you inferred.";
 
   /**
    * Parameter definition

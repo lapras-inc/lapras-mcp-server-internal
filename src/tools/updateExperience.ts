@@ -20,7 +20,7 @@ export class UpdateExperienceTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update a work experience on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Update a work experience on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This overwrites an existing entry in the user's live work history — only submit details the user has explicitly confirmed, never ones you inferred.";
 
   /**
    * Parameter definition

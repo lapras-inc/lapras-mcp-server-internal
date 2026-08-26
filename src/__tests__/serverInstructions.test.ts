@@ -46,11 +46,19 @@ describe("getServerInstructions", () => {
     expect(instructions).not.toContain("do not call them");
   });
 
+  /**
+   * APIキー有り版とAPIキー無し版が互いの文言を取り違えずに出し分けられているかを
+   * 検証する。有り版に実在する文字列であることを正側でも確認しておかないと、
+   * 有り版の文面が変わってその文字列が消えたときに、否定側のアサーションは
+   * 何もマッチしないまま常に成功し続け、検証として無意味になっても気づけない。
+   */
   it("APIキーがない場合、プロフィール系ツールを呼ばないよう案内する文面を返す", () => {
+    const withApiKeyInstructions = getServerInstructions(true);
     const instructions = getServerInstructions(false);
+    expect(withApiKeyInstructions).toContain("WHEN TO READ THE PROFILE");
     expect(instructions).toContain("do not call them");
     expect(instructions).toContain("search_jobs");
-    expect(instructions).not.toContain("treat it like saved");
+    expect(instructions).not.toContain("WHEN TO READ THE PROFILE");
   });
 
   it("APIキーを要求する全ての読み取り系ツールが、APIキー未設定時の案内文に列挙されている", () => {
@@ -60,5 +68,30 @@ describe("getServerInstructions", () => {
     for (const toolName of apiKeyRequiredReadToolNames) {
       expect(instructions).toContain(toolName);
     }
+  });
+
+  /**
+   * instructionsをどこまで読み込むかにはクライアント側の上限がある。Claude Codeは
+   * 2048文字で打ち切り、超過分は末尾から黙って捨てられる。この上限を超えて安全上の
+   * 指示が失われる回帰を防ぐ。バイト数ではなく、クライアントが数える単位に合わせて
+   * 文字数（String.length）で測る。
+   */
+  it("APIキー有無いずれの案内文も、クライアント側の2048文字上限に収まっている", () => {
+    expect(getServerInstructions(true).length).toBeLessThanOrEqual(2048);
+    expect(getServerInstructions(false).length).toBeLessThanOrEqual(2048);
+  });
+
+  /**
+   * 2048文字を超えた分は末尾から切り捨てられるため、推測での書き込みを禁じる
+   * 安全上の指示が末尾近くにあると、上限超過時にそこだけ失われる。指示文が
+   * 存在すること自体に加え、出現位置が上限内であることまで確認する。
+   */
+  it("推測での書き込みを禁じる安全指示が、2048文字上限より前の位置にある", () => {
+    const instructions = getServerInstructions(true);
+    // 文面の折り返し位置が変わっただけでテストが落ちないよう、改行をまたがない語で探す
+    const safetyPhrase = "inferred information";
+    const index = instructions.indexOf(safetyPhrase);
+    expect(index).toBeGreaterThanOrEqual(0);
+    expect(index).toBeLessThan(2048);
   });
 });

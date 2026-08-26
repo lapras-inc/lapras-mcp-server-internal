@@ -20,6 +20,8 @@ export class GetJobDetailTool implements IMCPTool {
   readonly description =
     "Get detailed information about a specific job posting. You can apply for jobs through the URL provided in the response.";
 
+  readonly annotations = { readOnlyHint: true };
+
   /**
    * Parameter definition
    */

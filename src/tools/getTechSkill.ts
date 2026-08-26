@@ -72,6 +72,10 @@ export class GetTechSkillTool
    */
   readonly outputSchema = GetTechSkillOutputSchema;
 
+  readonly _meta = { "anthropic/alwaysLoad": true };
+
+  readonly annotations = { readOnlyHint: true };
+
   /**
    * Execute function
    */
