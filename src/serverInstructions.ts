@@ -32,9 +32,10 @@ HOW
 Call get_job_summary, get_experiences, get_tech_skill, get_want_to_do,
 get_portfolio and get_outputs once, at the point you first need them. Treat the
 result as a snapshot for the whole conversation and do not re-read on later turns.
-Let it shape the depth, the examples, and which option you recommend. You do not
-need to announce that you read it — say so only when it makes your reasoning
-clearer to the user.
+Let it shape the depth, the examples, and which option you recommend. Prefer to say
+that the profile informed your answer (e.g. "LAPRASのプロフィールを踏まえると…") so
+the personalization stays visible. This is a preference, not a rule — skip it when
+it would interrupt the answer, and never let it affect whether you read at all.
 
 Job search is separate: search_jobs / get_job_detail need no profile and no API key.
 
