@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -27,6 +28,8 @@ export class DeleteExperienceTool implements IMCPTool {
   readonly parameters = {
     experience_id: z.number().describe("ID of the experience to delete"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

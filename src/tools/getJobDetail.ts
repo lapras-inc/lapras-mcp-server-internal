@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -20,7 +21,7 @@ export class GetJobDetailTool implements IMCPTool {
   readonly description =
     "Get detailed information about a specific job posting. You can apply for jobs through the URL provided in the response.";
 
-  readonly annotations = { readOnlyHint: true };
+  readonly kind: ToolKind = "job-search";
 
   /**
    * Parameter definition

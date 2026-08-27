@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 const EXPERIENCE_YEARS_LABEL_MAP: Record<number, string> = {
@@ -72,9 +73,7 @@ export class GetTechSkillTool
    */
   readonly outputSchema = GetTechSkillOutputSchema;
 
-  readonly _meta = { "anthropic/alwaysLoad": true };
-
-  readonly annotations = { readOnlyHint: true };
+  readonly kind: ToolKind = "profile-read";
 
   /**
    * Execute function

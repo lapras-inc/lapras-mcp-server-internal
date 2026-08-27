@@ -1,87 +1,128 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { type ToolKind, toolAnnotationsFor, toolMetaFor, toolRequiresApiKey } from "../toolKind.js";
 import { ALL_TOOLS } from "../toolRegistry.js";
 
 const TOOLS_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "tools");
 
 /**
- * ファイル内の`readonly name = "..."`からツール名を抽出する。抽出できない
- * ファイルをフォールバックで無視すると、この関数がそのツールを静かに見落とし
- * 始めても気づけなくなるため、抽出失敗は即座にエラーにする。
+ * ツール名と、そのツールを実装しているソースファイル名の対応。ALL_TOOLSの
+ * kindはファイル名の命名規則に依存せず宣言されるため、宣言と実装（validateApiKey
+ * の呼び出し有無）を突き合わせるにはファイルパスが要る。ここだけはファイル名との
+ * 対応を明示的に手書きし、命名規則からの逆算はしない。
  */
-function extractToolName(source: string, file: string): string {
-  const nameMatch = source.match(/readonly name = "([^"]+)"/);
-  if (!nameMatch) {
-    throw new Error(
-      `${file} からツール名を抽出できませんでした — extractToolNameの正規表現を見直してください`,
-    );
-  }
-  return nameMatch[1];
-}
+const TOOL_SOURCE_FILES: Record<string, string> = {
+  get_experiences: "getExperiences.ts",
+  get_job_summary: "getJobSummary.ts",
+  get_tech_skill: "getTechSkill.ts",
+  get_want_to_do: "getWantToDo.ts",
+  get_portfolio: "getPortfolio.ts",
+  get_outputs: "getOutputs.ts",
+  create_experience: "createExperience.ts",
+  update_experience: "updateExperience.ts",
+  delete_experience: "deleteExperience.ts",
+  update_job_summary: "updateJobSummary.ts",
+  update_tech_skill: "updateTechSkill.ts",
+  update_want_to_do: "updateWantToDo.ts",
+  search_jobs: "searchJobs.ts",
+  get_job_detail: "getJobDetail.ts",
+};
 
 /**
- * プロフィール読み取り系（LAPRAS_API_KEYを要求するget_*）ツールのnameを、
- * src/tools/*.ts を走査して求める。手書きの一覧だとツール追加時の更新漏れが
- * 起きるため、serverInstructions.test.tsと同じ方針でソースから導出する。
- *
- * ファイル名が"get"始まりというだけでは求人検索系のget_job_detailまで
- * 含んでしまうため、validateApiKeyを呼んでいるかで絞り込む。この判定は
- * 「LAPRAS_API_KEYを要求する読み取り系ツールはvalidateApiKeyを呼ぶ」という
- * 実装上の慣習に依存しており、その慣習が崩れると検出できなくなる。
+ * ツール名と期待するkindの対応を明示的なリテラルとして持つ。ファイル名からの
+ * 推論はしない — ツールが増えたときにこの一覧の更新漏れがあれば、下の
+ * 網羅性テストが検出する。
  */
-function getProfileReadToolNames(): string[] {
-  return readdirSync(TOOLS_DIR)
-    .filter((file) => file.startsWith("get") && file.endsWith(".ts"))
-    .flatMap((file) => {
-      const source = readFileSync(join(TOOLS_DIR, file), "utf-8");
-      if (!source.includes("validateApiKey")) return [];
-      return [extractToolName(source, file)];
-    });
-}
+const EXPECTED_KIND: Record<string, ToolKind> = {
+  get_experiences: "profile-read",
+  get_job_summary: "profile-read",
+  get_tech_skill: "profile-read",
+  get_want_to_do: "profile-read",
+  get_portfolio: "profile-read",
+  get_outputs: "profile-read",
+  create_experience: "profile-write",
+  update_experience: "profile-write",
+  delete_experience: "profile-write",
+  update_job_summary: "profile-write",
+  update_tech_skill: "profile-write",
+  update_want_to_do: "profile-write",
+  search_jobs: "job-search",
+  get_job_detail: "job-search",
+};
 
-/**
- * 書き込み系（update_ / create_ / delete_ で始まる名前の）ツールのnameを、
- * ファイル名の接頭辞から求める。この判定はファイル名の命名規則（update・
- * create・deleteのいずれかで始まる）に依存しており、命名規則から外れる
- * ファイルが追加されると検出できなくなる。
- */
-function getWriteToolNames(): string[] {
-  return readdirSync(TOOLS_DIR)
-    .filter(
-      (file) =>
-        (file.startsWith("update") || file.startsWith("create") || file.startsWith("delete")) &&
-        file.endsWith(".ts"),
-    )
-    .map((file) => extractToolName(readFileSync(join(TOOLS_DIR, file), "utf-8"), file));
-}
+describe("tool kind assignment", () => {
+  it("ALL_TOOLSの全ツールがEXPECTED_KINDに登場する（網羅性）", () => {
+    const namesInAllTools = ALL_TOOLS.map((tool) => tool.name).sort();
+    const namesInExpectedKind = Object.keys(EXPECTED_KIND).sort();
+    expect(namesInAllTools).toEqual(namesInExpectedKind);
+  });
 
-function findToolByName(name: string) {
-  const tool = ALL_TOOLS.find((t) => t.name === name);
-  if (!tool) {
-    throw new Error(`ALL_TOOLS に ${name} という名前のツールが見つかりません`);
-  }
-  return tool;
-}
+  it("各ツールのkindが期待どおりに割り当てられている", () => {
+    for (const tool of ALL_TOOLS) {
+      expect(tool.kind).toBe(EXPECTED_KIND[tool.name]);
+    }
+  });
+});
 
-describe("tool metadata", () => {
-  it("プロフィール読み取り系ツールは全て遅延ロード対象外(_meta)かつreadOnlyHintを持つ", () => {
-    const names = getProfileReadToolNames();
-    expect(names.length).toBeGreaterThan(0);
-    for (const name of names) {
-      const tool = findToolByName(name);
-      expect(tool._meta?.["anthropic/alwaysLoad"]).toBe(true);
-      expect(tool.annotations?.readOnlyHint).toBe(true);
+describe("tool metadata derived from kind", () => {
+  it("profile-readツールは、annotations.readOnlyHintとalwaysLoadの両方がtrueで導出される", () => {
+    const tools = ALL_TOOLS.filter((tool) => tool.kind === "profile-read");
+    expect(tools.length).toBe(6);
+    for (const tool of tools) {
+      expect(toolAnnotationsFor(tool.kind)).toEqual({ readOnlyHint: true });
+      expect(toolMetaFor(tool.kind)).toEqual({ "anthropic/alwaysLoad": true });
     }
   });
 
-  it("書き込み系ツールにはanthropic/alwaysLoadが誤って設定されていない", () => {
-    const names = getWriteToolNames();
-    expect(names.length).toBeGreaterThan(0);
-    for (const name of names) {
-      const tool = findToolByName(name);
-      expect(tool._meta?.["anthropic/alwaysLoad"]).not.toBe(true);
+  it("profile-writeツールは、annotationsもalwaysLoadも付かない(undefined)", () => {
+    const tools = ALL_TOOLS.filter((tool) => tool.kind === "profile-write");
+    expect(tools.length).toBe(6);
+    for (const tool of tools) {
+      expect(toolAnnotationsFor(tool.kind)).toBeUndefined();
+      expect(toolMetaFor(tool.kind)).toBeUndefined();
+    }
+  });
+
+  it("job-searchツールは、readOnlyHintは付くがalwaysLoadは付かない", () => {
+    const tools = ALL_TOOLS.filter((tool) => tool.kind === "job-search");
+    expect(tools.length).toBe(2);
+    for (const tool of tools) {
+      expect(toolAnnotationsFor(tool.kind)).toEqual({ readOnlyHint: true });
+      expect(toolMetaFor(tool.kind)).toBeUndefined();
+    }
+  });
+});
+
+/**
+ * requiresApiKeyは宣言しただけでは何も駆動しないため、宣言（toolKind.ts）と
+ * 実装（各ツールが実際にvalidateApiKeyを呼んでいるか）が食い違っていないかを
+ * ソースを読んで検査する。「呼んでいるかどうか」は文字列一致で判定しており、
+ * validateApiKeyという名前を変えずに別の実装へ置き換えると検出できなくなる。
+ */
+describe("kind の requiresApiKey とツール実装の整合性", () => {
+  it("ALL_TOOLSの全ツールがTOOL_SOURCE_FILESに登場する（網羅性）", () => {
+    const namesInAllTools = ALL_TOOLS.map((tool) => tool.name).sort();
+    const namesWithSourceFile = Object.keys(TOOL_SOURCE_FILES).sort();
+    expect(namesInAllTools).toEqual(namesWithSourceFile);
+  });
+
+  it("requiresApiKeyがtrueの種別を持つツールは、実装がvalidateApiKeyを呼んでいる", () => {
+    const tools = ALL_TOOLS.filter((tool) => toolRequiresApiKey(tool.kind));
+    expect(tools.length).toBeGreaterThan(0);
+    for (const tool of tools) {
+      const source = readFileSync(join(TOOLS_DIR, TOOL_SOURCE_FILES[tool.name]), "utf-8");
+      expect(source).toContain("validateApiKey");
+    }
+  });
+
+  it("requiresApiKeyがfalseの種別を持つツールは、実装がvalidateApiKeyを呼んでいない", () => {
+    const tools = ALL_TOOLS.filter((tool) => !toolRequiresApiKey(tool.kind));
+    expect(tools.length).toBeGreaterThan(0);
+    for (const tool of tools) {
+      const source = readFileSync(join(TOOLS_DIR, TOOL_SOURCE_FILES[tool.name]), "utf-8");
+      expect(source).not.toContain("validateApiKey");
     }
   });
 });

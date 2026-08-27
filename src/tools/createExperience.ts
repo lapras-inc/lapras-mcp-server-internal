@@ -5,6 +5,7 @@ import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { unescapeText } from "../helpers/textFormatter.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -59,6 +60,8 @@ export class CreateExperienceTool implements IMCPTool {
       .default("")
       .describe("Detailed description of the experience (Markdown format)"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

@@ -5,6 +5,7 @@ import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { unescapeText } from "../helpers/textFormatter.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -28,6 +29,8 @@ export class UpdateJobSummaryTool implements IMCPTool {
   readonly parameters = {
     job_summary: z.string().max(10000).describe("Job summary（職務要約）"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

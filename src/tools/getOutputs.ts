@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool } from "../types.js";
 
 const parameters = {
@@ -45,9 +46,7 @@ export class GetOutputsTool implements IMCPTool {
    */
   readonly parameters = parameters;
 
-  readonly _meta = { "anthropic/alwaysLoad": true };
-
-  readonly annotations = { readOnlyHint: true };
+  readonly kind: ToolKind = "profile-read";
 
   /**
    * Execute function

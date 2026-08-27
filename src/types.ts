@@ -1,5 +1,6 @@
-import type { TextContent, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
+import type { TextContent } from "@modelcontextprotocol/sdk/types.js";
 import type { z } from "zod";
+import type { ToolKind } from "./toolKind.js";
 
 /**
  * Zodスキーマから型を抽出するユーティリティ型
@@ -34,23 +35,13 @@ export interface IMCPTool<
   readonly outputSchema?: TOutput;
 
   /**
-   * MCPクライアントへの実行時ヒント。読み取り専用ツールに readOnlyHint: true を
-   * 立てると、確認ダイアログの摩擦が下がり、読み取り系ツール同士が並列実行されやすくなる。
+   * ツールの種別。MCPクライアントへ渡す annotations（readOnlyHint等）と
+   * _meta（"anthropic/alwaysLoad"等）は、この値から toolKind.ts の宣言表を
+   * 通じて一意に導出される。ツール側で annotations / _meta を個別に指定する
+   * 手段は無いため、正しい種別を選ぶことだけがクライアントへの申告内容を決める。
+   * 種別ごとの詳細は toolKind.ts を参照。
    */
-  readonly annotations?: ToolAnnotations;
-
-  /**
-   * MCP仕様のToolオブジェクトが許容する、クライアント拡張用の任意メタデータ領域。
-   *
-   * `"anthropic/alwaysLoad": true` はAnthropic製クライアント固有の拡張キー。
-   * ツール数が多いセッションでは、各ツールのdescription本文はクライアントが検索を
-   * 実行するまで読み込まれない（遅延ロードされる）ため、AIが「このツールを使うべきか」を
-   * 判断する時点ではdescriptionがまだ存在しない。このキーを立てたツールは遅延ロードの
-   * 対象から外れ、判断前にdescriptionが読める状態になる。`_meta`はMCP仕様が拡張用に
-   * 開けている領域で、知らないキーはクライアントが無視するだけなので、この拡張に
-   * 対応していないクライアントには影響しない。
-   */
-  readonly _meta?: Record<string, unknown>;
+  readonly kind: ToolKind;
 
   /**
    * ツールを実行する

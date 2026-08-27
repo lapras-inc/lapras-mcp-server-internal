@@ -5,6 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import type { TextContent, ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
 import type { z } from "zod";
 import { getServerInstructions } from "./serverInstructions.js";
+import { toolAnnotationsFor, toolMetaFor } from "./toolKind.js";
 import { ALL_TOOLS } from "./toolRegistry.js";
 
 const server = new McpServer(
@@ -55,8 +56,8 @@ for (const tool of ALL_TOOLS) {
       description: tool.description,
       inputSchema: tool.parameters,
       outputSchema: tool.outputSchema,
-      annotations: tool.annotations,
-      _meta: tool._meta,
+      annotations: toolAnnotationsFor(tool.kind),
+      _meta: toolMetaFor(tool.kind),
     },
     tool.execute.bind(tool),
   );

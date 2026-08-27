@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool } from "../types.js";
 
 /**
@@ -25,9 +26,7 @@ export class GetExpriencesTool implements IMCPTool {
    */
   readonly parameters = {} as const;
 
-  readonly _meta = { "anthropic/alwaysLoad": true };
-
-  readonly annotations = { readOnlyHint: true };
+  readonly kind: ToolKind = "profile-read";
 
   /**
    * Execute function

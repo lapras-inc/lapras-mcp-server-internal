@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 const EXPERIENCE_YEARS_ID_MAP: Array<{ max: number; id: number }> = [
@@ -51,6 +52,8 @@ export class UpdateTechSkillTool implements IMCPTool {
       .min(1)
       .describe("List of tech skills with experience years"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

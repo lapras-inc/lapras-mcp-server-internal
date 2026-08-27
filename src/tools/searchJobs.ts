@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 export const JobSearchResultSchema = z.object({
@@ -52,7 +53,7 @@ export class SearchJobsTool implements IMCPTool {
    */
   readonly description = "Search job by keyword, position, and minimum annual salary";
 
-  readonly annotations = { readOnlyHint: true };
+  readonly kind: ToolKind = "job-search";
 
   /**
    * Parameter definition
