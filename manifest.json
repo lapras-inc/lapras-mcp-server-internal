@@ -85,7 +85,7 @@
     },
     {
       "name": "get_outputs",
-      "description": "Get outputs (GitHub repositories, tech articles, events, slides, teratail replies) registered in LAPRAS with pagination"
+      "description": "Get the outputs the user has published (GitHub repos, tech articles, talks, slides, teratail replies) from LAPRAS — use when asked what they've built, written, or spoken about, or for a portfolio/bio/resume citing concrete work"
     }
   ],
   "keywords": ["mcp", "lapras", "job_description", "career", "jobs"],

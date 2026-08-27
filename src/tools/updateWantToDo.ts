@@ -5,6 +5,7 @@ import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { unescapeText } from "../helpers/textFormatter.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -20,7 +21,7 @@ export class UpdateWantToDoTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update career aspirations（今後のキャリアでやりたいこと） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Update career aspirations（今後のキャリアでやりたいこと） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This overwrites the user's live career aspirations — only submit content the user has explicitly confirmed, never content you inferred.";
 
   /**
    * Parameter definition
@@ -28,6 +29,8 @@ export class UpdateWantToDoTool implements IMCPTool {
   readonly parameters = {
     want_to_do: z.string().max(1000).describe("Career aspirations（今後のキャリアでやりたいこと）"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

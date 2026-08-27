@@ -5,6 +5,7 @@ import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { unescapeText } from "../helpers/textFormatter.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -20,7 +21,7 @@ export class UpdateExperienceTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update a work experience on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Update a work experience on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This overwrites an existing entry in the user's live work history — only submit details the user has explicitly confirmed, never ones you inferred.";
 
   /**
    * Parameter definition
@@ -60,6 +61,8 @@ export class UpdateExperienceTool implements IMCPTool {
       .default("")
       .describe("Detailed description of the experience (Markdown format)"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

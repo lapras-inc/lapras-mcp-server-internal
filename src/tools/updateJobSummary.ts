@@ -5,6 +5,7 @@ import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { unescapeText } from "../helpers/textFormatter.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 /**
@@ -20,7 +21,7 @@ export class UpdateJobSummaryTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Update job summary（職務要約） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv";
+    "Update job summary（職務要約） on LAPRAS(https://lapras.com). You can check the result at https://lapras.com/cv. This overwrites the user's live professional summary — only submit wording the user has explicitly confirmed, never content you inferred.";
 
   /**
    * Parameter definition
@@ -28,6 +29,8 @@ export class UpdateJobSummaryTool implements IMCPTool {
   readonly parameters = {
     job_summary: z.string().max(10000).describe("Job summary（職務要約）"),
   } as const;
+
+  readonly kind: ToolKind = "profile-write";
 
   /**
    * Execute function

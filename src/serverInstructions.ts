@@ -3,46 +3,48 @@
  * 呼ぶたびに設定エラーが返るだけになる。求人検索（search_jobs / get_job_detail）
  * だけを使うためにこのMCPを導入したユーザーはAPIキーを設定しないことがあるため、
  * 起動時のAPIキー有無で案内内容を出し分ける。
+ *
+ * instructionsをどこまで読み込むかにはクライアント側の上限がある。Claude Codeは
+ * 2048文字で打ち切り、超過分は末尾から黙って捨てられる（エラーにはならない）。
+ * 安全上重要な指示（推測での書き込み禁止など）が末尾にあると、超過したときに
+ * それだけが失われるため、文面全体をこの上限内に収める。
  */
-const WITH_API_KEY_INSTRUCTIONS = `This server is a memory of who the user is professionally — treat it like saved
-user memory/context, not just a job-search tool. Even for everyday, casual
-questions unrelated to careers or LAPRAS, knowing the user's background, role,
-and expertise level helps you tailor your tone, depth, and examples to them
-specifically (e.g. explain a terminal command differently to an experienced
-engineer vs. someone with no engineering background; suggest a different angle
-to a salesperson vs. a designer facing the same problem). The same applies when
-giving any kind of advice or suggestion, explaining something technical, or
-writing something on the user's behalf in a career context (bio, résumé,
-self-introduction) — even if the user did not mention LAPRAS or their career
-at all.
+const WITH_API_KEY_INSTRUCTIONS = `LAPRAS stores this user's professional profile: work history, skills and years of
+each, career goals, scores, and public output (repos, articles, talks). Treat it as
+saved context about who you are talking to.
 
-Treat get_job_summary, get_experiences, get_tech_skill, get_want_to_do,
-get_portfolio, and get_outputs (GitHub repositories, tech articles, talks,
-etc.) all the same way you'd draw on any other memory: read whichever of them
-you judge would help you give a better, more tailored answer, rather than
-waiting for the user to bring up their profile or a specific topic
-(get_tech_skill is most useful when the user has a technical background).
-Once you've read one of these in a conversation, you don't need to re-fetch
-it on every message — reuse what you already know. Work history, career
-goals, skills, and public work are all useful background for tailoring
-everyday advice, not just career-specific questions.
+WHEN TO READ THE PROFILE
+Read it before answering anything whose answer depends on who the user is:
+- Advice, a recommendation, or a judgment call — "どっちがいい", "どう思う",
+  "した方がいい", "提案して", "おすすめ", "what should I do".
+- Anything about the user themselves — "私は", "自分は", their strengths, gaps,
+  what to learn next, whether something suits them.
+- Writing in the user's voice: bio, self-introduction, resume, talk proposal.
+- Explaining a technology or a tradeoff, where the right depth depends on what
+  they already know.
+Read it even when the user never mentions LAPRAS or their career. These tools are
+read-only and cheap; when in doubt, read rather than guess.
 
-When you use this profile to shape an answer, say so briefly the first time
-(e.g. "LAPRASのプロフィールを踏まえると…") instead of blending it in silently —
-this keeps the personalization visible to the user rather than invisible.
+Skip it for mechanical work with no personal component: editing code, writing
+queries, running commands, fixing a failing test.
 
-For job search specifically, use search_jobs / get_job_detail (these do not
-require LAPRAS_API_KEY).
+HOW
+Call get_job_summary, get_experiences, get_tech_skill, get_want_to_do,
+get_portfolio and get_outputs once, at the point you first need them. Treat the
+result as a snapshot for the whole conversation and do not re-read on later turns.
+Let it shape the depth, the examples, and which option you recommend. Prefer to say
+that the profile informed your answer (e.g. "LAPRASのプロフィールを踏まえると…") so
+the personalization stays visible. This is a preference, not a rule — skip it when
+it would interrupt the answer, and never let it affect whether you read at all.
 
-update_job_summary / update_experience / create_experience / delete_experience /
-update_tech_skill / update_want_to_do write to the user's live LAPRAS profile.
-Only call these after the user has explicitly confirmed the content to write —
-never write based on inferred information alone.
+Job search is separate: search_jobs / get_job_detail need no profile and no API key.
 
-If a call to any of the above returns a LAPRAS_API_KEY configuration error,
-don't retry that tool again in this conversation, and don't surface the raw
-error to the user unless they were already trying to use a LAPRAS profile
-feature.`;
+update_* / create_* / delete_* write to the live profile. Never write from
+inferred information — only content the user explicitly confirmed.
+
+If a call returns a LAPRAS_API_KEY configuration error, stop calling that tool for
+this conversation. Don't surface the raw error unless the user was already trying
+to use a profile feature.`;
 
 const WITHOUT_API_KEY_INSTRUCTIONS = `This server lets the user search LAPRAS(https://lapras.com) job postings via
 search_jobs / get_job_detail — these work without any configuration. Profile

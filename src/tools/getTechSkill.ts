@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool, InferZodParams } from "../types.js";
 
 const EXPERIENCE_YEARS_LABEL_MAP: Record<number, string> = {
@@ -71,6 +72,8 @@ export class GetTechSkillTool
    * 返り値の構造をフィールド単位で意味づけするスキーマ
    */
   readonly outputSchema = GetTechSkillOutputSchema;
+
+  readonly kind: ToolKind = "profile-read";
 
   /**
    * Execute function

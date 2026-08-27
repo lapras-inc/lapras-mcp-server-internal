@@ -4,6 +4,7 @@ import { z } from "zod";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool } from "../types.js";
 
 const parameters = {
@@ -38,12 +39,14 @@ export class GetOutputsTool implements IMCPTool {
    * Tool description
    */
   readonly description =
-    "Get outputs（アウトプット一覧） on LAPRAS(https://lapras.com) - GitHub repositories, tech articles, event attendances, SpeakerDeck slides, and teratail replies, sorted by date in descending order with pagination";
+    "Get the outputs（アウトプット一覧） the user has published — GitHub repositories, tech articles, event/talk attendances, SpeakerDeck slides, and teratail replies registered on LAPRAS(https://lapras.com), sorted by date descending, with pagination. Call this when the user asks what they've built, written, or spoken about, wants a portfolio/output summary, or is writing a bio or resume that should cite concrete work. Use get_experiences for structured job history instead; this covers external, publicly showcased work.";
 
   /**
    * Parameter definition
    */
   readonly parameters = parameters;
+
+  readonly kind: ToolKind = "profile-read";
 
   /**
    * Execute function

@@ -3,6 +3,7 @@ import fetch from "node-fetch";
 import { BASE_URL } from "../constants.js";
 import { createErrorResponse } from "../helpers/createErrorResponse.js";
 import { validateApiKey } from "../helpers/validateApiKey.js";
+import type { ToolKind } from "../toolKind.js";
 import type { IMCPTool } from "../types.js";
 
 /**
@@ -24,6 +25,8 @@ export class GetJobSummaryTool implements IMCPTool {
    * Parameter definition
    */
   readonly parameters = {} as const;
+
+  readonly kind: ToolKind = "profile-read";
 
   /**
    * Execute function
